@@ -410,13 +410,18 @@
         updateEstimatedInfo(waypoints);
     }
 
-    function updateRouteInfo(route) {
-        const distance = (route.distance / 1000).toFixed(1); // Meter zu km
-        const durationMinutes = Math.round(route.duration / 60); // Sekunden zu Minuten
+function updateRouteInfo(route) {
+    const distance = (route.distance / 1000).toFixed(1); // Meter → km
 
-        document.getElementById('totalDistance').textContent = distance + ' km';
-        document.getElementById('totalDuration').textContent = formatDuration(durationMinutes);
-    }
+    // ⚙️ Eigene Durchschnittsgeschwindigkeit verwenden
+    const averageSpeed = 16.5; // km/h
+    const durationMinutes = Math.round((distance / averageSpeed) * 60);
+
+    document.getElementById('totalDistance').textContent = distance + ' km';
+    document.getElementById('totalDuration').textContent =
+        formatDuration(durationMinutes) + ' (Ø16.5 km/h)';
+}
+
 
     function updateEstimatedInfo(waypoints) {
         let totalDistance = 0;
@@ -430,7 +435,7 @@
         }
 
         // Geschätzte Dauer (18 km/h für Fahrrad)
-        const averageSpeed = 18;
+        const averageSpeed = 16.5;
         const durationMinutes = Math.round((totalDistance / averageSpeed) * 60);
 
         document.getElementById('totalDistance').textContent = totalDistance.toFixed(1) + ' km';
