@@ -12,53 +12,13 @@
             --strava-light-gray: #f7f7f7;
             --strava-border: #e0e0e0;
         }
-
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--strava-light-gray);
-            color: var(--strava-dark);
-            margin: 0;
-            padding: 0;
-        }
-
-        .header {
-            background: linear-gradient(120deg, var(--strava-orange), var(--strava-white));
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .logo {
-            font-weight: 700;
-            font-size: 28px;
-            color: var(--strava-white);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .logo span {
-            color: var(--strava-orange);
-        }
-
-        .container-main {
-            max-width: 1200px;
-            margin: 20px auto;
-            background-color: var(--strava-white);
-            border-radius: 8px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .page-title {
-            padding: 20px 30px;
-            margin: 0;
-            background-color: var(--strava-white);
-            border-bottom: 1px solid var(--strava-border);
-            font-weight: 600;
-            color: var(--strava-dark);
-        }
-
-        .content-wrapper {
-            padding: 30px;
-        }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: var(--strava-light-gray); color: var(--strava-dark); margin: 0; padding: 0; }
+        .header { background: linear-gradient(120deg, var(--strava-orange), var(--strava-white)); padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo { font-weight: 700; font-size: 28px; color: var(--strava-white); text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        .logo span { color: var(--strava-orange); }
+        .container-main { max-width: 1200px; margin: 20px auto; background-color: var(--strava-white); border-radius: 8px; box-shadow: 0 2px 15px rgba(0,0,0,0.1); overflow: hidden; }
+        .page-title { padding: 20px 30px; margin: 0; background-color: var(--strava-white); border-bottom: 1px solid var(--strava-border); font-weight: 600; color: var(--strava-dark); }
+        .content-wrapper { padding: 30px; }
     </style>
 </head>
 <body>
@@ -74,7 +34,8 @@
     <div class="content-wrapper">
         <a th:href="@{/route/new}" class="btn btn-primary mb-3">➕ Neue Route erstellen</a>
 
-        <div th:if="${routes.empty}">
+        <!-- Null-sicher: statt routes.empty -->
+        <div th:if="${#lists.isEmpty(routes)}">
             <div class="alert alert-info">
                 📝 Noch keine Routen gespeichert. Erstelle deine erste Route!
             </div>
@@ -88,20 +49,30 @@
                         <p class="card-text" th:text="${route.description}">Beschreibung</p>
                         <p class="card-text">
                             <small class="text-muted">
-                                Wegpunkte: <span th:text="${route.waypoints.size()}">0</span>
+                                Wegpunkte:
+                                <!-- Null-sicherer Count -->
+                                <span th:text="${#lists.size(route.waypoints)}">0</span>
                             </small>
                         </p>
                         <div class="btn-group" role="group">
                             <a th:href="@{/route/{id}(id=${route.id})}" class="btn btn-outline-primary btn-sm">
                                 Route anzeigen
                             </a>
-                            <!-- LÖSCH-BUTTON -->
-                            <form th:action="@{/route/{id}/delete(id=${route.id})}" method="post" style="display: inline;">
-                                <button type="submit" class="btn btn-outline-danger btn-sm"
-                                        onclick="return confirm('Route wirklich löschen?')">
-                                    🗑️ Löschen
-                                </button>
+
+                            <!-- POST-Formular ohne CSRF (da nicht genutzt) -->
+                            <form th:action="@{|/route/${route.id}/delete|}" method="post" style="display:inline;"
+                                  onsubmit="return confirm('Route wirklich löschen?')">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">🗑️ Löschen</button>
                             </form>
+
+                            <!-- Falls du stattdessen per GET löschen willst, aktiviere den Link
+                                 UND füge einen @GetMapping im Controller hinzu:
+                            <a th:href="@{/route/{id}/delete(id=${route.id})}"
+                               class="btn btn-outline-danger btn-sm"
+                               onclick="return confirm('Route wirklich löschen?')">
+                                🗑️ Löschen
+                            </a>
+                            -->
                         </div>
                     </div>
                 </div>
