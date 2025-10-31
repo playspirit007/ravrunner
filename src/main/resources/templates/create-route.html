@@ -2,8 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Neue Route - RavRunner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neue Route erstellen - RavRunner</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
             --strava-orange: #FC4C02;
@@ -17,6 +19,8 @@
             font-family: 'Helvetica Neue', Arial, sans-serif;
             background-color: var(--strava-light-gray);
             color: var(--strava-dark);
+            margin: 0;
+            padding: 0;
         }
 
         .header {
@@ -36,9 +40,110 @@
             color: var(--strava-orange);
         }
 
+        .container-main {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: var(--strava-white);
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .page-title {
+            padding: 20px 30px;
+            margin: 0;
+            background-color: var(--strava-white);
+            border-bottom: 1px solid var(--strava-border);
+            font-weight: 600;
+            color: var(--strava-dark);
+        }
+
+        .content-wrapper {
+            padding: 30px;
+        }
+
+        #map {
+            height: 500px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .waypoint-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--strava-border);
+            border-radius: 6px;
+            padding: 15px;
+            background-color: var(--strava-light-gray);
+        }
+
+        .waypoint-item {
+            background-color: var(--strava-white);
+            border: 1px solid var(--strava-border);
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
         .btn-primary {
             background-color: var(--strava-orange);
             border-color: var(--strava-orange);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: #e04402;
+            border-color: #e04402;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            font-weight: 600;
+        }
+
+        .btn-secondary {
+            background-color: var(--strava-dark);
+            border-color: var(--strava-dark);
+            font-weight: 600;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--strava-dark);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            border: 1px solid var(--strava-border);
+            border-radius: 4px;
+        }
+
+        .form-control:focus {
+            border-color: var(--strava-orange);
+            box-shadow: 0 0 0 0.2rem rgba(252, 76, 2, 0.25);
+        }
+
+        .card {
+            border: 1px solid var(--strava-border);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-buttons .btn {
+            flex: 1;
         }
     </style>
 </head>
@@ -49,25 +154,196 @@
     </div>
 </div>
 
-<div class="container mt-4">
-    <h1>Neue Route erstellen</h1>
+<div class="container-main">
+    <h1 class="page-title">Neue Route erstellen</h1>
 
-    <form th:action="@{/route/save}" th:object="${route}" method="post">
-        <div class="mb-3">
-            <label for="name" class="form-label">Routenname</label>
-            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+    <div class="content-wrapper">
+        <form id="routeForm" th:action="@{/route/debug-save}" method="post">
+            <div class="mb-4">
+                <label for="name" class="form-label">Routenname *</label>
+                <input type="text" class="form-control" id="name" name="name" required 
+                       th:value="${route?.name}" placeholder="Meine Fahrradroute">
+            </div>
+            
+            <div class="mb-4">
+                <label for="description" class="form-label">Beschreibung</label>
+                <textarea class="form-control" id="description" name="description" 
+                          th:text="${route?.description}" rows="3" placeholder="Beschreibe deine Fahrradroute..."></textarea>
+            </div>
+            
+            <div class="mb-4">
+                <label class="form-label">Karte</label>
+                <div class="card">
+                    <div class="card-body">
+                        <div id="map"></div>
+                        <div class="form-text text-muted mt-2">
+                            🗺️ Klicke auf die Karte um Wegpunkte zu setzen
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="form-label">Wegpunkte</label>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="waypoint-list">
+                            <div id="waypointsContainer">
+                                <!-- Waypoints werden hier dynamisch hinzugefügt -->
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary mt-3" onclick="addWaypoint()">
+                            ➕ Wegpunkt hinzufügen
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button type="submit" class="btn btn-success">✅ Route speichern</button>
+                <a th:href="@{/routes}" class="btn btn-secondary">❌ Abbrechen</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Waypoint Template (hidden) -->
+<div id="waypointTemplate" class="waypoint-item mb-2 p-2 border rounded" style="display: none;">
+    <div class="row g-2 align-items-center">
+        <div class="col-md-4">
+            <input type="text" class="form-control waypoint-name" placeholder="Wegpunkt Name" value="Punkt 1">
         </div>
-
-        <div class="mb-3">
-            <label for="description" class="form-label">Beschreibung</label>
-            <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
+        <div class="col-md-3">
+            <input type="number" class="form-control waypoint-lat" placeholder="Breitengrad" step="any" readonly>
         </div>
-
-        <button type="submit" class="btn btn-primary">Route speichern</button>
-        <a href="/routes" class="btn btn-secondary">Abbrechen</a>
-    </form>
+        <div class="col-md-3">
+            <input type="number" class="form-control waypoint-lng" placeholder="Längengrad" step="any" readonly>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeWaypoint(this)">🗑️ Löschen</button>
+        </div>
+    </div>
+    <input type="hidden" class="waypoint-data" name="waypoints">
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    let map;
+    let waypointCounter = 1;
+    let markers = [];
+
+    // Karte initialisieren
+    function initMap() {
+        map = L.map('map').setView([52.5200, 13.4050], 13);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Klick-Event für Wegpunkte
+        map.on('click', function(e) {
+            addWaypointFromMap(e.latlng.lat, e.latlng.lng);
+        });
+    }
+
+    // Wegpunkt von Karte hinzufügen
+    function addWaypointFromMap(lat, lng) {
+        const waypointItem = document.getElementById('waypointTemplate').cloneNode(true);
+        waypointItem.style.display = 'block';
+        waypointItem.id = '';
+        
+        const nameInput = waypointItem.querySelector('.waypoint-name');
+        const latInput = waypointItem.querySelector('.waypoint-lat');
+        const lngInput = waypointItem.querySelector('.waypoint-lng');
+        const dataInput = waypointItem.querySelector('.waypoint-data');
+        
+        nameInput.value = `Punkt ${waypointCounter}`;
+        latInput.value = lat.toFixed(6);
+        lngInput.value = lng.toFixed(6);
+        
+        // Daten als JSON speichern
+        const waypointData = {
+            name: nameInput.value,
+            latitude: lat,
+            longitude: lng
+        };
+        dataInput.name = `waypoints[${waypointCounter - 1}]`;
+        dataInput.value = JSON.stringify(waypointData);
+        
+        document.getElementById('waypointsContainer').appendChild(waypointItem);
+        
+        // Marker auf Karte setzen
+        const marker = L.marker([lat, lng])
+            .addTo(map)
+            .bindPopup(nameInput.value);
+        markers.push(marker);
+        
+        waypointCounter++;
+        updateWaypointNumbers();
+    }
+
+    // Manuellen Wegpunkt hinzufügen
+    function addWaypoint() {
+        addWaypointFromMap(52.5200, 13.4050); // Default Berlin
+    }
+
+    // Wegpunkt entfernen
+    function removeWaypoint(button) {
+        const waypointItem = button.closest('.waypoint-item');
+        const index = Array.from(waypointItem.parentNode.children).indexOf(waypointItem);
+        
+        waypointItem.remove();
+        
+        // Marker entfernen
+        if (markers[index]) {
+            map.removeLayer(markers[index]);
+            markers.splice(index, 1);
+        }
+        
+        updateWaypointNumbers();
+    }
+
+    // Wegpunkt-Nummern aktualisieren
+    function updateWaypointNumbers() {
+        const waypoints = document.querySelectorAll('.waypoint-item');
+        waypoints.forEach((item, index) => {
+            const nameInput = item.querySelector('.waypoint-name');
+            const dataInput = item.querySelector('.waypoint-data');
+            
+            if (!nameInput.value.startsWith('Punkt')) return;
+            
+            nameInput.value = `Punkt ${index + 1}`;
+            
+            // JSON Daten aktualisieren
+            try {
+                const waypointData = JSON.parse(dataInput.value);
+                waypointData.name = nameInput.value;
+                dataInput.value = JSON.stringify(waypointData);
+            } catch (e) {
+                console.error('Fehler beim Aktualisieren der Wegpunkt-Daten:', e);
+            }
+            
+            dataInput.name = `waypoints[${index}]`;
+        });
+        waypointCounter = waypoints.length + 1;
+    }
+
+    // Formular Submit
+    document.getElementById('routeForm').addEventListener('submit', function(e) {
+        // Validiere mindestens einen Wegpunkt
+        const waypoints = document.querySelectorAll('.waypoint-item');
+        if (waypoints.length === 0) {
+            e.preventDefault();
+            alert('❌ Bitte füge mindestens einen Wegpunkt hinzu!');
+            return;
+        }
+        
+        console.log('Formular wird gesendet...');
+    });
+
+    // Karte beim Laden initialisieren
+    document.addEventListener('DOMContentLoaded', initMap);
+</script>
 </body>
 </html>

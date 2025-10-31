@@ -52,40 +52,27 @@
 <div class="container mt-4">
     <h1>🚴 Willkommen bei RavRunner</h1>
     <p class="lead">Ihr Fahrrad-Routenplaner</p>
-
+    
     <div class="row mt-4">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Neue Route erstellen</h5>
-                    <a href="/routes" class="btn btn-primary">Route erstellen</a>
+                    <a th:href="@{/route/new}" class="btn btn-primary">Route erstellen</a>
                 </div>
             </div>
         </div>
-
+        
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Vorhandene Routen</h5>
-                    <a href="/routes" class="btn btn-secondary">Alle Routen anzeigen</a>
+                    <a th:href="@{/routes}" class="btn btn-secondary">Alle Routen anzeigen</a>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="mt-4" th:if="${routeCount != null}">
-        <div class="alert alert-success">
-            <strong>Erfolg!</strong> Die Anwendung läuft erfolgreich mit MongoDB.
-            <span th:text="'Gespeicherte Routen: ' + ${routeCount}"></span>
-        </div>
-    </div>
-
-    <div class="mt-4" th:if="${error != null}">
-        <div class="alert alert-danger">
-            <strong>Fehler!</strong> <span th:text="${error}"></span>
-        </div>
-    </div>
-
     <div class="mt-4 alert alert-success">
         <strong>Erfolg!</strong> Die Anwendung läuft erfolgreich mit MongoDB.
     </div>

@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  mongodb:
+  mongodb-auth:  # Hier den richtigen Servicenamen verwenden
     image: mongo:latest
-    container_name: ravrunner-mongodb
+    container_name: mongodb-auth  # Oder hier anpassen
     restart: unless-stopped
     ports:
       - "27017:27017"

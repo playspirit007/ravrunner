@@ -1,5 +1,7 @@
-db = db.getSiblingDB('ravrunner');
+// Zuerst zur admin Datenbank wechseln und User erstellen
+db = db.getSiblingDB('admin');
 
+// User für ravrunner Datenbank erstellen
 db.createUser({
     user: 'ravuser',
     pwd: 'ravpass',
@@ -10,6 +12,9 @@ db.createUser({
         }
     ]
 });
+
+// Zur ravrunner Datenbank wechseln
+db = db.getSiblingDB('ravrunner');
 
 // Testdaten einfügen
 db.routes.insertMany([

@@ -72,9 +72,9 @@
     <h1 class="page-title">Gespeicherte Routen</h1>
 
     <div class="content-wrapper">
-        <a href="/" class="btn btn-primary mb-3">➕ Neue Route erstellen</a>
+        <a th:href="@{/route/new}" class="btn btn-primary mb-3">➕ Neue Route erstellen</a>
 
-        <div th:if="${routes.IsEmpty()}">
+        <div th:if="${routes.empty}">
             <div class="alert alert-info">
                 📝 Noch keine Routen gespeichert. Erstelle deine erste Route!
             </div>
