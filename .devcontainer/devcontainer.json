@@ -1,0 +1,19 @@
+{
+  "name": "Java MongoDB Docker Environment",
+  "image": "mcr.microsoft.com/devcontainers/java:1-17-bullseye",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:1": {}
+  },
+  "forwardPorts": [8080, 27017],
+  "portsAttributes": {
+    "8080": {
+      "label": "Application",
+      "onAutoForward": "notify"
+    },
+    "27017": {
+      "label": "MongoDB"
+    }
+  },
+  "postCreateCommand": "docker-compose up -d && sleep 10",
+  "postStartCommand": "docker-compose start"
+}
