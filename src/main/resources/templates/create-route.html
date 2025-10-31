@@ -14,137 +14,27 @@
             --strava-light-gray: #f7f7f7;
             --strava-border: #e0e0e0;
         }
-
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--strava-light-gray);
-            color: var(--strava-dark);
-            margin: 0;
-            padding: 0;
-        }
-
-        .header {
-            background: linear-gradient(120deg, var(--strava-orange), var(--strava-white));
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .logo {
-            font-weight: 700;
-            font-size: 28px;
-            color: var(--strava-white);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .logo span {
-            color: var(--strava-orange);
-        }
-
-        .container-main {
-            max-width: 1200px;
-            margin: 20px auto;
-            background-color: var(--strava-white);
-            border-radius: 8px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .page-title {
-            padding: 20px 30px;
-            margin: 0;
-            background-color: var(--strava-white);
-            border-bottom: 1px solid var(--strava-border);
-            font-weight: 600;
-            color: var(--strava-dark);
-        }
-
-        .content-wrapper {
-            padding: 30px;
-        }
-
-        #map {
-            height: 500px;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .waypoint-list {
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid var(--strava-border);
-            border-radius: 6px;
-            padding: 15px;
-            background-color: var(--strava-light-gray);
-        }
-
-        .waypoint-item {
-            background-color: var(--strava-white);
-            border: 1px solid var(--strava-border);
-            border-radius: 4px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
-        .btn-primary {
-            background-color: var(--strava-orange);
-            border-color: var(--strava-orange);
-            font-weight: 600;
-        }
-
-        .btn-primary:hover {
-            background-color: #e04402;
-            border-color: #e04402;
-        }
-
-        .btn-success {
-            background-color: #28a745;
-            border-color: #28a745;
-            font-weight: 600;
-        }
-
-        .btn-secondary {
-            background-color: var(--strava-dark);
-            border-color: var(--strava-dark);
-            font-weight: 600;
-        }
-
-        .form-label {
-            font-weight: 600;
-            color: var(--strava-dark);
-            margin-bottom: 8px;
-        }
-
-        .form-control {
-            border: 1px solid var(--strava-border);
-            border-radius: 4px;
-        }
-
-        .form-control:focus {
-            border-color: var(--strava-orange);
-            box-shadow: 0 0 0 0.2rem rgba(252, 76, 2, 0.25);
-        }
-
-        .card {
-            border: 1px solid var(--strava-border);
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .action-buttons .btn {
-            flex: 1;
-        }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: var(--strava-light-gray); color: var(--strava-dark); margin:0; padding:0; }
+        .header { background: linear-gradient(120deg, var(--strava-orange), var(--strava-white)); padding:15px 0; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
+        .logo { font-weight:700; font-size:28px; color:var(--strava-white); text-shadow:1px 1px 2px rgba(0,0,0,0.2); }
+        .logo span { color:var(--strava-orange); }
+        .container-main { max-width:1200px; margin:20px auto; background-color:var(--strava-white); border-radius:8px; box-shadow:0 2px 15px rgba(0,0,0,0.1); overflow:hidden; }
+        .page-title { padding:20px 30px; margin:0; background-color:var(--strava-white); border-bottom:1px solid var(--strava-border); font-weight:600; color:var(--strava-dark); }
+        .content-wrapper { padding:30px; }
+        #map { height:500px; border-radius:6px; overflow:hidden; box-shadow:0 1px 5px rgba(0,0,0,0.1); margin-bottom:20px; }
+        .waypoint-list { max-height:300px; overflow-y:auto; border:1px solid var(--strava-border); border-radius:6px; padding:15px; background-color:var(--strava-light-gray); }
+        .waypoint-item { background-color:var(--strava-white); border:1px solid var(--strava-border); border-radius:4px; padding:10px; margin-bottom:10px; }
+        .btn-primary { background-color:var(--strava-orange); border-color:var(--strava-orange); font-weight:600; }
+        .btn-primary:hover { background-color:#e04402; border-color:#e04402; }
+        .btn-success { background-color:#28a745; border-color:#28a745; font-weight:600; }
+        .btn-secondary { background-color:var(--strava-dark); border-color:var(--strava-dark); font-weight:600; }
+        .form-label { font-weight:600; color:var(--strava-dark); margin-bottom:8px; }
+        .form-control { border:1px solid var(--strava-border); border-radius:4px; }
+        .form-control:focus { border-color:var(--strava-orange); box-shadow:0 0 0 0.2rem rgba(252, 76, 2, 0.25); }
+        .card { border:1px solid var(--strava-border); border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
+        .card-body { padding:20px; }
+        .action-buttons { display:flex; gap:10px; margin-top:20px; }
+        .action-buttons .btn { flex:1; }
     </style>
 </head>
 <body>
@@ -158,7 +48,8 @@
     <h1 class="page-title">Neue Route erstellen</h1>
 
     <div class="content-wrapper">
-        <form id="routeForm" th:action="@{/route/debug-save}" method="post">
+        <!-- WICHTIG: th:action bleibt, wird im JS gelesen -->
+        <form id="routeForm" th:action="@{/route/debug-save}" method="post" novalidate>
             <div class="mb-4">
                 <label for="name" class="form-label">Routenname *</label>
                 <input type="text" class="form-control" id="name" name="name" required 
@@ -200,8 +91,8 @@
             </div>
             
             <div class="action-buttons">
-                <button type="submit" class="btn btn-success">✅ Route speichern</button>
-                <a th:href="@{/routes}" class="btn btn-secondary">❌ Abbrechen</a>
+                <button id="saveBtn" type="submit" class="btn btn-success">✅ Route speichern</button>
+                <a th:href="@{/}" class="btn btn-secondary">❌ Abbrechen</a>
             </div>
         </form>
     </div>
@@ -233,21 +124,16 @@
     let waypointCounter = 1;
     let markers = [];
 
-    // Karte initialisieren
     function initMap() {
         map = L.map('map').setView([52.5200, 13.4050], 13);
-        
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
-
-        // Klick-Event für Wegpunkte
         map.on('click', function(e) {
             addWaypointFromMap(e.latlng.lat, e.latlng.lng);
         });
     }
 
-    // Wegpunkt von Karte hinzufügen
     function addWaypointFromMap(lat, lng) {
         const waypointItem = document.getElementById('waypointTemplate').cloneNode(true);
         waypointItem.style.display = 'block';
@@ -262,87 +148,101 @@
         latInput.value = lat.toFixed(6);
         lngInput.value = lng.toFixed(6);
         
-        // Daten als JSON speichern
-        const waypointData = {
-            name: nameInput.value,
-            latitude: lat,
-            longitude: lng
-        };
+        const waypointData = { name: nameInput.value, latitude: lat, longitude: lng };
         dataInput.name = `waypoints[${waypointCounter - 1}]`;
         dataInput.value = JSON.stringify(waypointData);
         
         document.getElementById('waypointsContainer').appendChild(waypointItem);
         
-        // Marker auf Karte setzen
-        const marker = L.marker([lat, lng])
-            .addTo(map)
-            .bindPopup(nameInput.value);
+        const marker = L.marker([lat, lng]).addTo(map).bindPopup(nameInput.value);
         markers.push(marker);
         
         waypointCounter++;
         updateWaypointNumbers();
     }
 
-    // Manuellen Wegpunkt hinzufügen
     function addWaypoint() {
-        addWaypointFromMap(52.5200, 13.4050); // Default Berlin
+        addWaypointFromMap(52.5200, 13.4050);
     }
 
-    // Wegpunkt entfernen
     function removeWaypoint(button) {
         const waypointItem = button.closest('.waypoint-item');
         const index = Array.from(waypointItem.parentNode.children).indexOf(waypointItem);
-        
         waypointItem.remove();
-        
-        // Marker entfernen
         if (markers[index]) {
             map.removeLayer(markers[index]);
             markers.splice(index, 1);
         }
-        
         updateWaypointNumbers();
     }
 
-    // Wegpunkt-Nummern aktualisieren
     function updateWaypointNumbers() {
         const waypoints = document.querySelectorAll('.waypoint-item');
         waypoints.forEach((item, index) => {
             const nameInput = item.querySelector('.waypoint-name');
             const dataInput = item.querySelector('.waypoint-data');
-            
             if (!nameInput.value.startsWith('Punkt')) return;
-            
             nameInput.value = `Punkt ${index + 1}`;
-            
-            // JSON Daten aktualisieren
             try {
                 const waypointData = JSON.parse(dataInput.value);
                 waypointData.name = nameInput.value;
                 dataInput.value = JSON.stringify(waypointData);
-            } catch (e) {
-                console.error('Fehler beim Aktualisieren der Wegpunkt-Daten:', e);
-            }
-            
+            } catch (e) { console.error('Fehler beim Aktualisieren der Wegpunkt-Daten:', e); }
             dataInput.name = `waypoints[${index}]`;
         });
         waypointCounter = waypoints.length + 1;
     }
 
-    // Formular Submit
-    document.getElementById('routeForm').addEventListener('submit', function(e) {
-        // Validiere mindestens einen Wegpunkt
+    // === Formular via fetch absenden und danach weiterleiten ===
+    document.getElementById('routeForm').addEventListener('submit', async function(e) {
+        e.preventDefault(); // Standard-Navigation verhindern
+
         const waypoints = document.querySelectorAll('.waypoint-item');
         if (waypoints.length === 0) {
-            e.preventDefault();
             alert('❌ Bitte füge mindestens einen Wegpunkt hinzu!');
             return;
         }
-        
-        console.log('Formular wird gesendet...');
+
+        const form = e.currentTarget;
+        const saveBtn = document.getElementById('saveBtn');
+        const originalBtnText = saveBtn.innerText;
+        saveBtn.disabled = true;
+        saveBtn.innerText = '💾 Speichere...';
+
+        try {
+            // Action-URL, die Thymeleaf serverseitig auflöst (z.B. /route/debug-save)
+            const actionUrl = form.getAttribute('action');
+
+            // FormData einsammeln (inkl. deiner dynamischen Hidden-Inputs)
+            const formData = new FormData(form);
+
+            // Optional: CSRF-Token (aktiv, falls du Spring Security nutzt)
+            // Erwartet: ein <input type="hidden" name="_csrf" value="..."> im Formular
+            const csrfToken = form.querySelector('input[name="_csrf"]')?.value;
+
+            const response = await fetch(actionUrl, {
+                method: 'POST',
+                body: formData,
+                headers: csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : undefined
+            });
+
+            if (response.ok) {
+                // ✅ Erfolgreich gespeichert -> weiterleiten
+                window.location.href = '/routes';
+            } else {
+                const text = await response.text().catch(() => '');
+                alert('❌ Speichern fehlgeschlagen.\n\nStatus: ' + response.status + ' ' + response.statusText + (text ? '\n\n' + text : ''));
+                saveBtn.disabled = false;
+                saveBtn.innerText = originalBtnText;
+            }
+        } catch (err) {
+            console.error(err);
+            alert('❌ Unerwarteter Fehler beim Speichern.');
+            saveBtn.disabled = false;
+            saveBtn.innerText = originalBtnText;
+        }
     });
 
-    // Karte beim Laden initialisieren
     document.addEventListener('DOMContentLoaded', initMap);
 </script>
 </body>
