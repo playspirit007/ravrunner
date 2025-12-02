@@ -21,33 +21,12 @@ public class RouteController {
     @Autowired
     private RouteRepository routeRepository;
 
-    @GetMapping("/")
-    public String home(Model model) {
-        try {
-            long routeCount = routeRepository.count();
-            model.addAttribute("routeCount", routeCount);
-            System.out.println("MongoDB Verbindung erfolgreich! Routen: " + routeCount);
-        } catch (Exception e) {
-            System.err.println("MongoDB Verbindungsfehler: " + e.getMessage());
-            model.addAttribute("error", "Datenbank nicht verbunden");
-        }
-        return "index";
-    }
-
-    @GetMapping("/routes")
+  @GetMapping("/routes")
     public String listRoutes(Model model) {
-        try {
-            List<Route> routes = routeRepository.findAll();
-            if (routes == null) routes = new ArrayList<>();
-            model.addAttribute("routes", routes);
-            System.out.println("Lade " + routes.size() + " Routen");
-        } catch (Exception e) {
-            System.err.println("Fehler beim Laden der Routen: " + e.getMessage());
-            model.addAttribute("routes", new ArrayList<>());
-            model.addAttribute("error", "Fehler beim Laden der Routen: " + e.getMessage());
-        }
-        return "routes";
-    }
+    List<Route> routes = routeRepository.findAll();
+    model.addAttribute("routes", routes);
+    return "routes";
+}
 
     @GetMapping("/route/new")
     public String createRouteForm(Model model) {
@@ -78,11 +57,6 @@ public class RouteController {
         return performDelete(id, ra);
     }
 
-    @GetMapping("/route/{id}/delete")
-    public String deleteRouteGet(@PathVariable("id") String id, RedirectAttributes ra) {
-        return performDelete(id, ra);
-    }
-
     private String performDelete(String id, RedirectAttributes ra) {
         try {
             if (!routeRepository.existsById(id)) {
@@ -90,7 +64,6 @@ public class RouteController {
                 return "redirect:/routes";
             }
             routeRepository.deleteById(id);
-            System.out.println("Route gelöscht: " + id);
             ra.addFlashAttribute("msg", "Route gelöscht.");
         } catch (IllegalArgumentException ex) {
             System.err.println("Ungültige ID: " + id + " | " + ex.getMessage());
@@ -102,65 +75,90 @@ public class RouteController {
         return "redirect:/routes";
     }
 
-    @PostMapping("/route/debug-save")
-    @ResponseBody
-    public String debugSaveRoute(@RequestParam Map<String, String> allParams) {
-        System.out.println("=== 🐛 DEBUG FORMULAR DATEN ===");
-        allParams.forEach((key, value) -> System.out.println("🔍 " + key + " = " + value));
 
-        System.out.println("=== 🎯 WAYPOINT ANALYSIS ===");
-        int waypointCount = 0;
-        for (String key : allParams.keySet()) {
-            if (key.startsWith("waypoints")) {
-                waypointCount++;
-                System.out.println("📍 Waypoint " + waypointCount + ": " + allParams.get(key));
-            }
+@GetMapping("/route/create")
+public String showCreateForm(Model model) {
+    model.addAttribute("route", new Route());
+    return "create-route"; // Name deines Templates
+}
+
+@PostMapping("/route/save")
+public String saveRoute(@RequestParam Map<String, String> params, RedirectAttributes ra) {
+    try {
+        String name = params.get("name");
+        String description = params.getOrDefault("description", "");
+
+        if (name == null || name.trim().isEmpty()) {
+            ra.addFlashAttribute("error", "Routenname darf nicht leer sein.");
+            return "redirect:/route/new";
         }
-        System.out.println("Gesamte Waypoints: " + waypointCount);
 
-        try {
-            String name = allParams.get("name");
-            String description = allParams.get("description");
+        Route route = new Route(name, description);
 
-            if (name == null || name.trim().isEmpty()) {
-                return "❌ FEHLER: Routenname ist leer!";
+        ObjectMapper mapper = new ObjectMapper();
+        List<Waypoint> waypoints = new ArrayList<>();
+
+        // Waypoints in richtiger Reihenfolge anhand des Index (waypoints[0], waypoints[1], ...)
+        for (int i = 0; ; i++) {
+            String key = "waypoints[" + i + "]";
+            if (!params.containsKey(key)) {
+                break;
             }
-
-            Route route = new Route(name, description != null ? description : "");
-
-            List<Waypoint> waypointList = new ArrayList<>();
-            for (String key : allParams.keySet()) {
-                if (key.startsWith("waypoints")) {
-                    try {
-                        String waypointJson = allParams.get(key);
-                        ObjectMapper mapper = new ObjectMapper();
-                        Waypoint waypoint = mapper.readValue(waypointJson, Waypoint.class);
-                        waypointList.add(waypoint);
-                        System.out.println("✅ Waypoint gespeichert: " + waypoint.getName());
-                    } catch (Exception e) {
-                        System.err.println("❌ Waypoint Fehler: " + e.getMessage());
-                    }
-                }
-            }
-
-            route.setWaypoints(waypointList);
-            Route saved = routeRepository.save(route);
-
-            return "✅ DEBUG ERFOLG!<br>" +
-                    "Route gespeichert mit ID: " + saved.getId() + "<br>" +
-                    "Waypoints: " + waypointList.size() + "<br>" +
-                    "<a href='/routes'>Zu den Routen</a> | " +
-                    "<a href='/route/new'>Neue Route</a>";
-
-        } catch (Exception e) {
-            return "❌ FEHLER beim Speichern: " + e.getMessage();
+            String json = params.get(key);
+            Waypoint wp = mapper.readValue(json, Waypoint.class);
+            waypoints.add(wp);
         }
+
+        if (waypoints.isEmpty()) {
+            ra.addFlashAttribute("error", "Bitte füge mindestens einen Wegpunkt hinzu.");
+            return "redirect:/route/new";
+        }
+
+        route.setWaypoints(waypoints);
+
+        Route saved = routeRepository.save(route);
+
+        ra.addFlashAttribute("msg", "Route erfolgreich gespeichert.");
+        // Browser per JS-Fetch folgt dem Redirect → URL landet bei /route/{id}
+        return "redirect:/route/" + saved.getId();
+
+    } catch (Exception e) {
+        ra.addFlashAttribute("error", "Fehler beim Speichern: " + e.getMessage());
+        return "redirect:/route/new";
+    }
+}
+
+private static class WaypointFormData {
+    private String name;
+    private double latitude;
+    private double longitude;
+
+    public WaypointFormData() {
     }
 
-    @ExceptionHandler(Exception.class)
-    public String handleAnyException(Exception e, RedirectAttributes ra) {
-        System.err.println("Unerwarteter Fehler: " + e.getClass().getName() + " | " + e.getMessage());
-        ra.addFlashAttribute("error", "Unerwarteter Fehler: " + e.getMessage());
-        return "redirect:/routes";
+    public String getName() {
+        return name;
     }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+}
+
 }

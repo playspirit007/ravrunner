@@ -1,0 +1,138 @@
+:root {
+    --strava-orange: #FC4C02;
+    --strava-white: #FFFFFF;
+    --strava-dark: #333333;
+    --strava-light-gray: #f7f7f7;
+    --strava-border: #e0e0e0;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--strava-light-gray);
+    color: var(--strava-dark);
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background: linear-gradient(120deg, var(--strava-orange), var(--strava-white));
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--strava-white);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.logo span {
+    color: var(--strava-orange);
+}
+
+.container-main {
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: var(--strava-white);
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.page-title {
+    padding: 20px 30px;
+    margin: 0;
+    background-color: var(--strava-white);
+    border-bottom: 1px solid var(--strava-border);
+    font-weight: 600;
+    color: var(--strava-dark);
+}
+
+.content-wrapper {
+    padding: 30px;
+}
+
+#map {
+    height: 500px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.waypoint-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--strava-border);
+    border-radius: 6px;
+    padding: 15px;
+    background-color: var(--strava-light-gray);
+}
+
+.waypoint-item {
+    background-color: var(--strava-white);
+    border: 1px solid var(--strava-border);
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-primary {
+    background-color: var(--strava-orange);
+    border-color: var(--strava-orange);
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: #e04402;
+    border-color: #e04402;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    font-weight: 600;
+}
+
+.btn-secondary {
+    background-color: var(--strava-dark);
+    border-color: var(--strava-dark);
+    font-weight: 600;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--strava-dark);
+    margin-bottom: 8px;
+}
+
+.form-control {
+    border: 1px solid var(--strava-border);
+    border-radius: 4px;
+}
+
+.form-control:focus {
+    border-color: var(--strava-orange);
+    box-shadow: 0 0 0 0.2rem rgba(252, 76, 2, 0.25);
+}
+
+.card {
+    border: 1px solid var(--strava-border);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.action-buttons .btn {
+    flex: 1;
+}

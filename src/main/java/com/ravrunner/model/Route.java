@@ -15,7 +15,6 @@ public class Route {
     private List<Waypoint> waypoints = new ArrayList<>();
     private LocalDateTime createdAt;
 
-    // Konstruktoren
     public Route() {
         this.createdAt = LocalDateTime.now();
     }
@@ -33,7 +32,6 @@ public class Route {
         this.waypoints = waypoints != null ? waypoints : new ArrayList<>();
     }
 
-    // Getter und Setter
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     
@@ -50,4 +48,13 @@ public class Route {
     
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public void addWaypoint(Waypoint waypoint) {
+        if (waypoints == null) {
+            waypoints = new ArrayList<>();
+        }
+    this.waypoints.add(waypoint);
+    }
+
+
 }

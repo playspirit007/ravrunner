@@ -5,7 +5,6 @@ public class Waypoint {
     private double latitude;
     private double longitude;
 
-    // Konstruktoren
     public Waypoint() {}
 
     public Waypoint(String name, double latitude, double longitude) {
@@ -14,7 +13,6 @@ public class Waypoint {
         this.longitude = longitude;
     }
 
-    // Getter und Setter
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     
