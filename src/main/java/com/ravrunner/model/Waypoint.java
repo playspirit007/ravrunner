@@ -5,6 +5,17 @@ public class Waypoint {
     private double latitude;
     private double longitude;
 
+
+/**
+ * Repräsentiert einen einzelnen Wegpunkt einer Route.
+ * Wird als Bestandteil der Route in MongoDB gespeichert.
+ *
+ * Besteht aus:
+ * - name        → Anzeigename (z.B. "Start", "Punkt 3")
+ * - latitude    → Breitengrad
+ * - longitude   → Längengrad
+ */
+
     public Waypoint() {}
 
     public Waypoint(String name, double latitude, double longitude) {
